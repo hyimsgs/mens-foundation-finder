@@ -37,10 +37,10 @@ export default async function handler(req, res) {
 
 다음 JSON 형식으로만 답변해주세요:
 {
-  "shade": "21",
+  "shade": "23",
   "confidence": 0.8,
-  "reasoning": "피부가 밝은 편이며 한국 남성 평균보다 약간 밝아 보입니다",
-  "secondary": "23"
+  "reasoning": "피부가 한국 남성 평균 톤에 해당합니다",
+  "secondary": "21"
 }`
             },
             {
@@ -73,17 +73,17 @@ export default async function handler(req, res) {
       console.error('JSON 파싱 에러:', parseError);
       // 파싱 실패 시 기본값
       analysisResult = {
-        shade: '21',
+        shade: '23', // 23호로 변경
         confidence: 0.7,
         reasoning: 'GPT 응답 파싱 실패로 기본값 사용',
-        secondary: '23'
+        secondary: '21'
       };
     }
 
     // 결과 검증 및 보정
     const validShades = ['17', '21', '23', '25'];
     if (!validShades.includes(analysisResult.shade)) {
-      analysisResult.shade = '21'; // 기본값
+      analysisResult.shade = '23'; // 기본값 23호로 변경
     }
 
     if (!validShades.includes(analysisResult.secondary)) {
@@ -133,7 +133,7 @@ export default async function handler(req, res) {
 // 폴백용 기본 분석
 function basicSkinAnalysis() {
   const shades = ['17', '21', '23', '25'];
-  const weights = [0.15, 0.4, 0.35, 0.1]; // 21호, 23호 확률 높게
+  const weights = [0.2, 0.3, 0.35, 0.15]; // 더 균등하게 분배
   
   let random = Math.random();
   for (let i = 0; i < weights.length; i++) {
@@ -146,5 +146,5 @@ function basicSkinAnalysis() {
     }
   }
   
-  return { shade: '21', secondary: '23' };
+  return { shade: '23', secondary: '21' }; // 기본값도 23호로 변경
 }
