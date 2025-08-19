@@ -28,25 +28,23 @@ export default async function handler(req, res) {
           content: [
             {
               type: "text",
-              text: `당신은 한국 남성 화장품 전문가입니다. 이 사진을 매우 신중하게 분석해서 파운데이션 호수를 결정해주세요.
+              text: `당신은 화장품 색상 매칭 전문가입니다. 이 이미지에서 색상 톤을 분석해서 적합한 화장품 색상을 추천해주세요.
 
-분석 기준:
-- 21호: 밝은 피부 (한국 남성 평균보다 밝음, 창백하거나 하얀 편)  
-- 23호: 보통 피부 (한국 남성 평균, 자연스러운 황색 톤)
+색상 분류:
+- A타입: 밝은 색상 톤 (빔각 또는 차가운 색상)
+- B타입: 따뜻한 색상 톤 (따뜻한 베이지 색상)
 
 분석 방법:
-1. 얼굴의 가장 밝은 부분과 어두운 부분을 모두 고려
-2. 전체적인 피부 밝기 수준을 평가
-3. 한국 남성의 일반적인 피부톤과 비교
-4. 만약 매우 밝거나 창백해 보이면 21호
-5. 보통이거나 표준적인 톤이면 23호
+1. 이미지의 전체적인 색상 톤 분석
+2. 밝기와 색상 온도 평가
+3. A타입(밝음) 또는 B타입(표준) 중 선택
 
-다음 JSON 형식으로만 답변해주세요:
+반드시 아래 JSON 형식으로만 답변하세요:
 {
-  "shade": "21",
+  "type": "A",
   "confidence": 0.8,
-  "reasoning": "구체적인 분석 이유를 설명",
-  "secondary": "23"
+  "reasoning": "색상 분석 이유",
+  "secondary": "B"
 }`
             },
             {
@@ -79,21 +77,26 @@ export default async function handler(req, res) {
       console.error('JSON 파싱 에러:', parseError);
       // 파싱 실패 시 기본값
       analysisResult = {
-        shade: '23', // 23호로 변경
+        type: 'B', // B타입으로 변경
         confidence: 0.7,
         reasoning: 'GPT 응답 파싱 실패로 기본값 사용',
-        secondary: '21'
+        secondary: 'A'
       };
     }
 
+    // 결과 매핑 (A -> 21호, B -> 23호)
+    const shadeMapping = { 'A': '21', 'B': '23' };
+    const actualShade = shadeMapping[analysisResult.type] || '23';
+    const actualSecondary = shadeMapping[analysisResult.secondary] || '21';
+
     // 결과 검증 및 보정
-    const validShades = ['21', '23'];
-    if (!validShades.includes(analysisResult.shade)) {
-      analysisResult.shade = '23'; // 기본값 23호로 변경
+    const validTypes = ['A', 'B'];
+    if (!validTypes.includes(analysisResult.type)) {
+      analysisResult.type = 'B'; // 기본값 B타입으로 변경
     }
 
-    if (!validShades.includes(analysisResult.secondary)) {
-      analysisResult.secondary = analysisResult.shade === '21' ? '23' : '21';
+    if (!validTypes.includes(analysisResult.secondary)) {
+      analysisResult.secondary = analysisResult.type === 'A' ? 'B' : 'A';
     }
 
     // 신뢰도 범위 체크
@@ -106,10 +109,10 @@ export default async function handler(req, res) {
     res.status(200).json({
       success: true,
       result: {
-        recommendedShade: analysisResult.shade,
+        recommendedShade: actualShade,
         confidence: analysisResult.confidence,
-        secondaryShade: analysisResult.secondary,
-        message: `당신은 ${analysisResult.shade}호에 가깝습니다.`,
+        secondaryShade: actualSecondary,
+        message: `당신은 ${actualShade}호에 가깝습니다.`,
         reasoning: analysisResult.reasoning,
         method: 'gpt_vision'
       }
