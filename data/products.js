@@ -5,7 +5,7 @@ export const PRODUCTS_DB = {
   '17': [
     {
       id: 'cushion_17_1',
-      name: '미샤 M 쿠션 파운데이션 17호',
+      name: '미샤 M 쿠션 17호 (밝은톤)',
       brand: '미샤',
       type: '쿠션',
       shade: '17',
@@ -20,7 +20,7 @@ export const PRODUCTS_DB = {
     },
     {
       id: 'foundation_17_1', 
-      name: '헤라 홈므 리퀴드 파운데이션 17호',
+      name: '헤라 리퀴드 파데 17호',
       brand: '헤라',
       type: '파운데이션',
       shade: '17',
@@ -35,7 +35,7 @@ export const PRODUCTS_DB = {
     },
     {
       id: 'concealer_17_1',
-      name: '더샘 커버 퍼펙션 팁 컨실러 17호',
+      name: '더샘 커버 컨실러 17호',
       brand: '더샘', 
       type: '컨실러',
       shade: '17',
@@ -53,7 +53,7 @@ export const PRODUCTS_DB = {
   '21': [
     {
       id: 'cushion_21_1',
-      name: '미샤 M 쿠션 파운데이션 21호',
+      name: '미샤 M 쿠션 21호 (자연커버)',
       brand: '미샤',
       type: '쿠션',
       shade: '21', 
@@ -68,7 +68,7 @@ export const PRODUCTS_DB = {
     },
     {
       id: 'foundation_21_1',
-      name: '헤라 홈므 리퀴드 파운데이션 21호',
+      name: '헤라 리퀴드 파운데이션 21호',
       brand: '헤라',
       type: '파운데이션', 
       shade: '21',
@@ -83,7 +83,7 @@ export const PRODUCTS_DB = {
     },
     {
       id: 'bb_21_1',
-      name: '이니스프리 노세범 미네랄 파우더 21호',
+      name: '이니스프리 노세범 파우더 21호',
       brand: '이니스프리',
       type: 'BB크림',
       shade: '21',
@@ -98,7 +98,7 @@ export const PRODUCTS_DB = {
     },
     {
       id: 'concealer_21_1',
-      name: '더샘 커버 퍼펙션 팁 컨실러 21호',
+      name: '더샘 커버 컨실러 21호',
       brand: '더샘',
       type: '컨실러', 
       shade: '21',
@@ -116,7 +116,7 @@ export const PRODUCTS_DB = {
   '23': [
     {
       id: 'cushion_23_1', 
-      name: '미샤 M 쿠션 파운데이션 23호',
+      name: '미샤 M 쿠션 23호 (표준커버)',
       brand: '미샤',
       type: '쿠션',
       shade: '23',
@@ -131,7 +131,7 @@ export const PRODUCTS_DB = {
     },
     {
       id: 'foundation_23_1',
-      name: '맥 스튜디오 픽스 파운데이션 NC25',
+      name: '맥 스튜디오 픽스 파데 NC25',
       brand: 'MAC',
       type: '파운데이션',
       shade: '23',
@@ -146,7 +146,7 @@ export const PRODUCTS_DB = {
     },
     {
       id: 'bb_23_1',
-      name: '바비브라운 스킨 파운데이션 웜 아이보리',
+      name: '바비브라운 스킨 파데 웜 아이보리',
       brand: '바비브라운',
       type: 'BB크림',
       shade: '23', 
@@ -179,7 +179,7 @@ export const PRODUCTS_DB = {
   '25': [
     {
       id: 'cushion_25_1',
-      name: '미샤 M 쿠션 파운데이션 25호', 
+      name: '미샤 M 쿠션 25호 (어두운톤)', 
       brand: '미샤',
       type: '쿠션',
       shade: '25',
@@ -194,7 +194,7 @@ export const PRODUCTS_DB = {
     },
     {
       id: 'foundation_25_1',
-      name: '에스티로더 더블웨어 파운데이션 5W1',
+      name: '에스티로더 더블웨어 파데 5W1',
       brand: '에스티로더',
       type: '파운데이션',
       shade: '25',
@@ -209,7 +209,7 @@ export const PRODUCTS_DB = {
     },
     {
       id: 'concealer_25_1',
-      name: '더샘 커버 퍼펙션 팁 컨실러 25호',
+      name: '더샘 커버 컨실러 25호',
       brand: '더샘',
       type: '컨실러',
       shade: '25',
