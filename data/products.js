@@ -61,7 +61,7 @@ export const PRODUCTS_DB = {
       price: '15,900원',
       originalPrice: '22,000원',
       discount: '28%',
-      coupangUrl: 'https://coupa.ng/ceeee1', 
+      coupangUrl: 'https://link.coupang.com/a/cLxynM', 
       imageUrl: '/products/missha-cushion-21.jpg',
       rating: 4.4,
       reviewCount: 3542
@@ -76,7 +76,7 @@ export const PRODUCTS_DB = {
       price: '28,500원',
       originalPrice: '35,000원',
       discount: '19%',
-      coupangUrl: 'https://coupa.ng/ceeee2',
+      coupangUrl: 'https://link.coupang.com/a/cLxzxa',
       imageUrl: '/products/hera-foundation-21.jpg', 
       rating: 4.6,
       reviewCount: 2387
@@ -91,7 +91,7 @@ export const PRODUCTS_DB = {
       price: '12,600원', 
       originalPrice: '18,000원',
       discount: '30%',
-      coupangUrl: 'https://coupa.ng/ceeee3',
+      coupangUrl: 'https://link.coupang.com/a/cLxz3c',
       imageUrl: '/products/innisfree-powder-21.jpg',
       rating: 4.2,
       reviewCount: 1698
@@ -106,7 +106,7 @@ export const PRODUCTS_DB = {
       price: '6,900원',
       originalPrice: '9,500원',
       discount: '27%',
-      coupangUrl: 'https://coupa.ng/ceeee4',
+      coupangUrl: 'https://link.coupang.com/a/cLxCak',
       imageUrl: '/products/thesaem-concealer-21.jpg',
       rating: 4.5,
       reviewCount: 4312
@@ -124,7 +124,7 @@ export const PRODUCTS_DB = {
       price: '15,900원',
       originalPrice: '22,000원', 
       discount: '28%',
-      coupangUrl: 'https://coupa.ng/cffff1',
+      coupangUrl: 'https://link.coupang.com/a/cLxCGr',
       imageUrl: '/products/missha-cushion-23.jpg',
       rating: 4.5,
       reviewCount: 4156
@@ -139,7 +139,7 @@ export const PRODUCTS_DB = {
       price: '42,900원',
       originalPrice: '52,000원',
       discount: '17%', 
-      coupangUrl: 'https://coupa.ng/cffff2',
+      coupangUrl: 'https://link.coupang.com/a/cLxDuf',
       imageUrl: '/products/mac-foundation-23.jpg',
       rating: 4.7,
       reviewCount: 1534
@@ -154,7 +154,7 @@ export const PRODUCTS_DB = {
       price: '38,500원',
       originalPrice: '48,000원',
       discount: '20%',
-      coupangUrl: 'https://coupa.ng/cffff3',
+      coupangUrl: 'https://link.coupang.com/a/cLxGtT',
       imageUrl: '/products/bobbibrown-foundation-23.jpg',
       rating: 4.4,
       reviewCount: 987
@@ -169,7 +169,7 @@ export const PRODUCTS_DB = {
       price: '18,900원',
       originalPrice: '24,000원',
       discount: '21%',
-      coupangUrl: 'https://coupa.ng/cffff4',
+      coupangUrl: 'https://link.coupang.com/a/cLxIbu',
       imageUrl: '/products/laneige-concealer-23.jpg', 
       rating: 4.3,
       reviewCount: 2043
