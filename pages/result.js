@@ -124,6 +124,18 @@ export default function Result() {
               </details>
             </div>
           </div>
+
+          {/* Footer Notices */}
+          <div className="mt-8 space-y-4 text-xs text-gray-500">
+            <div className="bg-gray-900 p-4 rounded border border-gray-800">
+              <h3 className="font-medium text-gray-300 mb-2">광고 고지</h3>
+              <p>본 페이지의 일부 링크에는 쿠팡 파트너스 제휴 링크가 포함되어 있으며, 구매 시 일정 수수료를 받을 수 있습니다.</p>
+            </div>
+            <div className="bg-gray-900 p-4 rounded border border-gray-800">
+              <h3 className="font-medium text-gray-300 mb-2">개인정보 안내</h3>
+              <p>업로드 사진은 분석 즉시 폐기되며 서버에 저장하지 않습니다.</p>
+            </div>
+          </div>
         </div>
       </div>
     </>
