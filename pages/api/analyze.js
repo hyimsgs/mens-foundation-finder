@@ -131,7 +131,7 @@ export default async function handler(req, res) {
 // 폴백용 기본 분석
 function basicSkinAnalysis() {
   const shades = ['21', '23'];
-  const weights = [0.45, 0.55]; // 21호 45%, 23호 55%
+  const weights = [0.4, 0.6]; // 21호 40%, 23호 60% (한국 남성 평균에 맞게)
   
   let random = Math.random();
   for (let i = 0; i < weights.length; i++) {
