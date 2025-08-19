@@ -17,7 +17,8 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: '이미지 데이터가 없습니다.' });
     }
 
-    console.log('GPT Vision API 호출 시작...');
+    console.log('GPT Vision API 호출 시작...', new Date().toISOString());
+    console.log('이미지 크기:', imageBase64.length);
 
     const response = await openai.chat.completions.create({
       model: "gpt-4o",
@@ -27,18 +28,25 @@ export default async function handler(req, res) {
           content: [
             {
               type: "text",
-              text: `당신은 한국 남성 화장품 전문가입니다. 이 사진을 보고 파운데이션 호수를 분석해주세요.
+              text: `당신은 한국 남성 화장품 전문가입니다. 이 사진을 매우 신중하게 분석해서 파운데이션 호수를 결정해주세요.
 
 분석 기준:
-- 21호: 밝은 피부 (한국 남성 평균보다 밝음)  
-- 23호: 보통 피부 (한국 남성 평균)
+- 21호: 밝은 피부 (한국 남성 평균보다 밝음, 창백하거나 하얀 편)  
+- 23호: 보통 피부 (한국 남성 평균, 자연스러운 황색 톤)
+
+분석 방법:
+1. 얼굴의 가장 밝은 부분과 어두운 부분을 모두 고려
+2. 전체적인 피부 밝기 수준을 평가
+3. 한국 남성의 일반적인 피부톤과 비교
+4. 만약 매우 밝거나 창백해 보이면 21호
+5. 보통이거나 표준적인 톤이면 23호
 
 다음 JSON 형식으로만 답변해주세요:
 {
-  "shade": "23",
+  "shade": "21",
   "confidence": 0.8,
-  "reasoning": "피부가 한국 남성 평균 톤에 해당합니다",
-  "secondary": "21"
+  "reasoning": "구체적인 분석 이유를 설명",
+  "secondary": "23"
 }`
             },
             {
