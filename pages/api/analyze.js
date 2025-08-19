@@ -30,10 +30,8 @@ export default async function handler(req, res) {
               text: `당신은 한국 남성 화장품 전문가입니다. 이 사진을 보고 파운데이션 호수를 분석해주세요.
 
 분석 기준:
-- 17호: 매우 밝은 피부 (창백한 편)
 - 21호: 밝은 피부 (한국 남성 평균보다 밝음)  
 - 23호: 보통 피부 (한국 남성 평균)
-- 25호: 어두운 피부 (탄 피부, 구릿빛)
 
 다음 JSON 형식으로만 답변해주세요:
 {
@@ -81,7 +79,7 @@ export default async function handler(req, res) {
     }
 
     // 결과 검증 및 보정
-    const validShades = ['17', '21', '23', '25'];
+    const validShades = ['21', '23'];
     if (!validShades.includes(analysisResult.shade)) {
       analysisResult.shade = '23'; // 기본값 23호로 변경
     }
@@ -132,8 +130,8 @@ export default async function handler(req, res) {
 
 // 폴백용 기본 분석
 function basicSkinAnalysis() {
-  const shades = ['17', '21', '23', '25'];
-  const weights = [0.2, 0.3, 0.35, 0.15]; // 더 균등하게 분배
+  const shades = ['21', '23'];
+  const weights = [0.45, 0.55]; // 21호 45%, 23호 55%
   
   let random = Math.random();
   for (let i = 0; i < weights.length; i++) {
@@ -141,7 +139,7 @@ function basicSkinAnalysis() {
     if (random <= 0) {
       return {
         shade: shades[i],
-        secondary: i < weights.length - 1 ? shades[i + 1] : shades[i - 1]
+        secondary: shades[1 - i] // 반대 호수
       };
     }
   }

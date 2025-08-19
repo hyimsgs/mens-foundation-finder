@@ -6,7 +6,7 @@ function MyApp({ Component, pageProps }) {
     <>
       <Head>
         <title>남자 파운데이션 몇 호? | 사진으로 5초 진단</title>
-        <meta name="description" content="사진 1장으로 17/21/23/25+ 파운데이션 호수 추천. 남자 전용 간단 진단, 쿠팡 링크로 바로 구매." />
+        <meta name="description" content="사진 1장으로 21/23호 파운데이션 호수 추천. 남자 전용 간단 진단, 쿠팡 링크로 바로 구매." />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
         

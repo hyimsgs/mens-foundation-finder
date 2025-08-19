@@ -128,7 +128,7 @@ export default function Home() {
         <header className="border-b border-gray-800 bg-black/90 backdrop-blur">
           <div className="max-w-4xl mx-auto px-4 py-4">
             <h1 className="text-2xl font-bold text-center">남자 파운데이션 몇 호?</h1>
-            <p className="text-gray-400 text-center mt-2">사진 1장으로 17/21/23/25+ 중 가까운 호수를 예측합니다</p>
+            <p className="text-gray-400 text-center mt-2">사진 1장으로 21/23호 중 가까운 호수를 예측합니다</p>
             <div className="text-center mt-2">
               <span className="text-xs px-2 py-1 rounded bg-gray-700 text-gray-300">
                 ✓ 분석 준비됨
