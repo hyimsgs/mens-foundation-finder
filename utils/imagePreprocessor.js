@@ -20,7 +20,9 @@ export async function preprocessImage(imageBase64) {
     console.log('얼굴 특징 마스킹 완료, 스킨 패치 추출 중...');
     
     // 마스킹된 이미지에서 스킨 색상 패치 추출
-    return extractSkinPatches(canvas);
+    const colorData = extractSkinPatches(canvas);
+    
+    return colorData;
     
   } catch (error) {
     console.error('이미지 전처리 에러:', error);
@@ -80,7 +82,7 @@ function createImageFromBase64(base64) {
   });
 }
 
-// 마스킹된 이미지에서 스킨 색상 패치 추출
+// 마스킹된 이미지에서 스킨 색상 RGB 값 추출
 function extractSkinPatches(canvas) {
   const ctx = canvas.getContext('2d');
   const width = canvas.width;
@@ -120,12 +122,33 @@ function extractSkinPatches(canvas) {
   
   console.log('추출된 스킨 색상 패치 수:', patches.length);
   
-  // 패치가 없으면 더미 사용
+  // 패치가 없으면 더미 RGB 값 사용
   if (patches.length === 0) {
-    return createDummyColorPatch();
+    return {
+      avgRGB: { r: 210, g: 185, b: 165 }, // 더미 23호 색상
+      patches: []
+    };
   }
   
-  return createColorPatchImage(patches);
+  // 모든 패치의 평균 RGB 계산
+  const totalR = patches.reduce((sum, patch) => sum + patch.r, 0);
+  const totalG = patches.reduce((sum, patch) => sum + patch.g, 0);
+  const totalB = patches.reduce((sum, patch) => sum + patch.b, 0);
+  
+  const avgRGB = {
+    r: Math.round(totalR / patches.length),
+    g: Math.round(totalG / patches.length),
+    b: Math.round(totalB / patches.length)
+  };
+  
+  console.log('평균 RGB:', avgRGB);
+  
+  // RGB 데이터와 시각화용 이미지 모두 반환
+  return {
+    avgRGB: avgRGB,
+    patches: patches,
+    visualImage: createColorPatchImage(patches) // 시각화용
+  };
 }
 
 // 평균 색상 계산 (검은 픽셀 제외)

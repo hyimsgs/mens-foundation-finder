@@ -29,12 +29,12 @@ export default function Home() {
     try {
       console.log('1. 분석 시작, 얼굴 마스킹 + 스킨 패치 추출...');
       
-      // 얼굴 마스킹 + 스킨 패치 추출
-      const skinPatchImage = await preprocessImage(uploadedImage);
-      console.log('2. 스킨 패치 추출 완료');
+      // 얼굴 마스킹 + RGB 데이터 추출
+      const colorData = await preprocessImage(uploadedImage);
+      console.log('2. RGB 데이터 추출 완료:', colorData.avgRGB);
       
-      // 색상 분석 API 호출
-      console.log('3. 색상 분석 API 호출 시작...');
+      // RGB 분석 API 호출
+      console.log('3. RGB 분석 API 호출 시작...');
       
       const response = await fetch('/api/analyze', {
         method: 'POST',
@@ -42,7 +42,8 @@ export default function Home() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          skinPatchImage: skinPatchImage
+          rgbData: colorData.avgRGB,
+          skinPatchImage: colorData.visualImage // 시각화용
         })
       });
       
