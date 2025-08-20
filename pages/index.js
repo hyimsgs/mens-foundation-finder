@@ -43,7 +43,8 @@ export default function Home() {
         },
         body: JSON.stringify({
           rgbData: colorData.avgRGB,
-          skinPatchImage: colorData.visualImage // 시각화용
+          skinPatchImage: colorData.visualImage, // 시각화용
+          brightness: (colorData.avgRGB.r + colorData.avgRGB.g + colorData.avgRGB.b) / 3 // 디버깅용
         })
       });
       

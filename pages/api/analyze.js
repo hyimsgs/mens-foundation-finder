@@ -134,8 +134,8 @@ function analyzeShadeFromRGB(rgb) {
   // 전체적인 밝기 계산 (0-255)
   const brightness = (r + g + b) / 3;
   
-  // 21호 vs 23호 구분점 (200 기준)
-  const threshold = 200;
+  // 21호 vs 23호 구분점 (180 기준으로 낮춤)
+  const threshold = 180;
   
   let selectedShade;
   let confidence;
@@ -143,13 +143,13 @@ function analyzeShadeFromRGB(rgb) {
   
   if (brightness >= threshold) {
     selectedShade = '21';
-    // 밝을수록 높은 신뢰도 (200~255 범위에서)
+    // 밝을수록 높은 신뢰도 (180~255 범위에서)
     const normalizedBrightness = (brightness - threshold) / (255 - threshold);
     confidence = Math.max(0.6, 0.7 + normalizedBrightness * 0.2);
     reasoning = `평균 밝기 ${Math.round(brightness)}로 밝은 베이지 톤 (21호)`;
   } else {
     selectedShade = '23';
-    // 어두울수록 높은 신뢰도 (0~200 범위에서)
+    // 어두울수록 높은 신뢰도 (0~180 범위에서)
     const normalizedBrightness = brightness / threshold;
     confidence = Math.max(0.6, 0.7 + (1 - normalizedBrightness) * 0.2);
     reasoning = `평균 밝기 ${Math.round(brightness)}로 표준 베이지 톤 (23호)`;
