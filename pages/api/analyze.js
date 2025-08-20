@@ -11,34 +11,115 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { imageBase64 } = req.body;
+    const { skinPatchImage } = req.body;
     
-    if (!imageBase64) {
-      return res.status(400).json({ error: '이미지 데이터가 없습니다.' });
+    if (!skinPatchImage) {
+      return res.status(400).json({ error: '스킨 패치 데이터가 없습니다.' });
     }
 
-    console.log('이미지 분석 시작...', new Date().toISOString());
-    console.log('이미지 크기:', imageBase64.length);
+    console.log('스킨 패치 색상 분석 시작...', new Date().toISOString());
 
-    // 이미지 기반 스마트 분석
-    const analysisResult = analyzeImageData(imageBase64);
-    
-    console.log('최종 분석 결과:', analysisResult);
+    const response = await openai.chat.completions.create({
+      model: "gpt-4o",
+      messages: [
+        {
+          role: "user",
+          content: [
+            {
+              type: "text",
+              text: `당신은 화장품 색상 매칭 전문가입니다. 이 비식별 색상 패치들을 분석해서 적합한 베이지/아이보리 화장품 색상을 추천해주세요.
+
+이 이미지는 사람의 얼굴이 아니라 순수한 색상 샘플들입니다.
+
+색상 매칭 기준:
+- LIGHT: 밝은 베이지 색상 (아이보리, 피치 톤)
+- MEDIUM: 보통 베이지 색상 (내추럴 베이지, 샌드 톤)
+
+색상 분석 방법:
+1. 각 색상 패치의 RGB 값 분석
+2. 전체적인 밝기와 색조 평가
+3. 베이지 색상 스펙트럼에서 위치 판단
+
+반드시 아래 JSON 형식으로만 답변하세요:
+{
+  "match": "LIGHT",
+  "confidence": 0.85,
+  "reasoning": "색상 분석 이유",
+  "secondary": "MEDIUM"
+}`
+            },
+            {
+              type: "image_url",
+              image_url: {
+                "url": skinPatchImage,
+                "detail": "high"
+              }
+            }
+          ]
+        }
+      ],
+      max_tokens: 500,
+    });
+
+    const gptResponse = response.choices[0].message.content;
+    console.log('GPT 색상 분석 응답:', gptResponse);
+
+    // JSON 파싱
+    let analysisResult;
+    try {
+      const jsonMatch = gptResponse.match(/\{[\s\S]*\}/);
+      if (jsonMatch) {
+        analysisResult = JSON.parse(jsonMatch[0]);
+      } else {
+        throw new Error('JSON 형식을 찾을 수 없음');
+      }
+    } catch (parseError) {
+      console.error('JSON 파싱 에러:', parseError);
+      // 파싱 실패 시 기본값
+      analysisResult = {
+        match: 'MEDIUM',
+        confidence: 0.7,
+        reasoning: 'GPT 응답 파싱 실패로 기본값 사용',
+        secondary: 'LIGHT'
+      };
+    }
+
+    // 결과 매핑 (LIGHT -> 21호, MEDIUM -> 23호)
+    const shadeMapping = { 'LIGHT': '21', 'MEDIUM': '23' };
+    const actualShade = shadeMapping[analysisResult.match] || '23';
+    const actualSecondary = shadeMapping[analysisResult.secondary] || '21';
+
+    // 결과 검증 및 보정
+    const validMatches = ['LIGHT', 'MEDIUM'];
+    if (!validMatches.includes(analysisResult.match)) {
+      analysisResult.match = 'MEDIUM';
+    }
+
+    if (!validMatches.includes(analysisResult.secondary)) {
+      analysisResult.secondary = analysisResult.match === 'LIGHT' ? 'MEDIUM' : 'LIGHT';
+    }
+
+    // 신뢰도 범위 체크
+    if (analysisResult.confidence < 0 || analysisResult.confidence > 1) {
+      analysisResult.confidence = 0.8;
+    }
+
+    console.log('최종 색상 분석 결과:', analysisResult);
 
     res.status(200).json({
       success: true,
       result: {
-        recommendedShade: analysisResult.shade,
+        recommendedShade: actualShade,
         confidence: analysisResult.confidence,
-        secondaryShade: analysisResult.secondary,
-        message: `당신은 ${analysisResult.shade}호에 가깝습니다.`,
+        secondaryShade: actualSecondary,
+        message: `당신은 ${actualShade}호에 가깝습니다.`,
         reasoning: analysisResult.reasoning,
-        method: 'image_analysis'
+        method: 'skin_patch_analysis'
       }
     });
 
   } catch (error) {
-    console.error('분석 에러:', error);
+    console.error('색상 분석 API 에러:', error);
     
     // 에러 시 기본 분석으로 폴백
     const fallbackResult = basicSkinAnalysis();
@@ -50,7 +131,7 @@ export default async function handler(req, res) {
         confidence: 0.6,
         secondaryShade: fallbackResult.secondary,
         message: `당신은 ${fallbackResult.shade}호에 가깝습니다.`,
-        reasoning: '이미지 분석 방법 사용',
+        reasoning: '스킨 패치 분석 방법 사용',
         method: 'fallback',
         error: error.message
       }

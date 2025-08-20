@@ -14,7 +14,8 @@
     "react-dom": "^18.2.0",
     "lucide-react": "^0.263.1",
     "opencv.js": "^1.2.1",
-    "openai": "^4.20.1"
+    "openai": "^4.20.1",
+    "face-api.js": "^0.22.2"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.16",
