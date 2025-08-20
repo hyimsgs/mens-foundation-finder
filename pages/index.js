@@ -1,30 +1,14 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Upload, Camera, CheckCircle, AlertCircle, ArrowRight } from 'lucide-react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
-import { loadFaceApiModels, preprocessImage } from '../utils/imagePreprocessor';
+import { preprocessImage } from '../utils/imagePreprocessor';
 
 export default function Home() {
   const [uploadedImage, setUploadedImage] = useState(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [agreed, setAgreed] = useState(false);
-  const [modelsLoading, setModelsLoading] = useState(true);
   const router = useRouter();
-
-  // Face-api 모델 로드
-  useEffect(() => {
-    async function initModels() {
-      try {
-        await loadFaceApiModels();
-        setModelsLoading(false);
-        console.log('얼굴 인식 모델 준비 완료');
-      } catch (error) {
-        console.error('모델 로드 실패:', error);
-        setModelsLoading(false); // 실패해도 진행
-      }
-    }
-    initModels();
-  }, []);
 
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
@@ -43,14 +27,14 @@ export default function Home() {
     setIsAnalyzing(true);
     
     try {
-      console.log('1. 분석 시작, 얼굴 특징 마스킹 진행...');
+      console.log('1. 분석 시작, 얼굴 마스킹 + 스킨 패치 추출...');
       
-      // 얼굴 특징 마스킹 + 스킨 패치 추출
+      // 얼굴 마스킹 + 스킨 패치 추출
       const skinPatchImage = await preprocessImage(uploadedImage);
       console.log('2. 스킨 패치 추출 완료');
       
-      // 분석 API 호출
-      console.log('3. 색상 매칭 API 호출 시작...');
+      // 색상 분석 API 호출
+      console.log('3. 색상 분석 API 호출 시작...');
       
       const response = await fetch('/api/analyze', {
         method: 'POST',
@@ -70,7 +54,7 @@ export default function Home() {
       if (result.success) {
         const { recommendedShade, confidence, secondaryShade, reasoning } = result.result;
         console.log('6. 결과 성공, 이동 시작...');
-        router.push(`/result?shade=${recommendedShade}&confidence=${Math.round(confidence * 100)}&secondary=${secondaryShade || ''}&method=skin_analysis`);
+        router.push(`/result?shade=${recommendedShade}&confidence=${Math.round(confidence * 100)}&secondary=${secondaryShade || ''}&method=simple_masking`);
       } else {
         console.log('6. API 오류:', result.error);
         throw new Error(result.error);
@@ -145,10 +129,10 @@ export default function Home() {
         <header className="border-b border-gray-800 bg-black/90 backdrop-blur">
           <div className="max-w-4xl mx-auto px-4 py-4">
             <h1 className="text-2xl font-bold text-center">남자 파운데이션 몇 호?</h1>
-            <p className="text-gray-400 text-center mt-2">사진 1장으로 21/23호 중 가까운 호수를 예측합니다</p>
+            <p className="text-gray-400 text-center mt-2">사진 1장으로 17/21/23/25호 중 가까운 호수를 예측합니다</p>
             <div className="text-center mt-2">
               <span className="text-xs px-2 py-1 rounded bg-gray-700 text-gray-300">
-                {modelsLoading ? '특징 인식 모델 로딩 중...' : '✓ 스마트 분석 준비됨'}
+                ✓ 스마트 분석 준비됨
               </span>
             </div>
           </div>
@@ -237,18 +221,13 @@ export default function Home() {
           {/* Analyze Button */}
           <button
             onClick={handleAnalyze}
-            disabled={!uploadedImage || !agreed || isAnalyzing || modelsLoading}
+            disabled={!uploadedImage || !agreed || isAnalyzing}
             className="w-full bg-white text-black font-semibold py-4 px-6 rounded-lg hover:bg-gray-200 disabled:bg-gray-700 disabled:text-gray-400 disabled:cursor-not-allowed transition-colors flex items-center justify-center"
           >
             {isAnalyzing ? (
               <>
                 <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-black mr-2"></div>
                 스마트 분석 중...
-              </>
-            ) : modelsLoading ? (
-              <>
-                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-gray-400 mr-2"></div>
-                모델 로딩 중...
               </>
             ) : (
               <>

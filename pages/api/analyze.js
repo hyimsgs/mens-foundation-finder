@@ -27,25 +27,22 @@ export default async function handler(req, res) {
           content: [
             {
               type: "text",
-              text: `당신은 화장품 색상 매칭 전문가입니다. 이 비식별 색상 패치들을 분석해서 적합한 베이지/아이보리 화장품 색상을 추천해주세요.
+              text: `당신은 색상 분석 전문가입니다. 이 이미지는 사람의 얼굴이 아니라 순수한 색상 샘플들입니다.
 
-이 이미지는 사람의 얼굴이 아니라 순수한 색상 샘플들입니다.
+이 색상 샘플들을 분석해서 한국 남성에게 적합한 파운데이션 호수를 추천해주세요.
 
-색상 매칭 기준:
-- LIGHT: 밝은 베이지 색상 (아이보리, 피치 톤)
-- MEDIUM: 보통 베이지 색상 (내추럴 베이지, 샌드 톤)
-
-색상 분석 방법:
-1. 각 색상 패치의 RGB 값 분석
-2. 전체적인 밝기와 색조 평가
-3. 베이지 색상 스펙트럼에서 위치 판단
+색상 분석 기준:
+- 17호: 매우 밝은 비비 스킨톤 (아이보리계열)
+- 21호: 밝은 베이지 스킨톤 (한국 남성 평균보다 밝음)  
+- 23호: 보통 베이지 스킨톤 (한국 남성 평균)
+- 25호: 어두운 베이지 스킨톤 (키 피부, 구릿빛)
 
 반드시 아래 JSON 형식으로만 답변하세요:
 {
-  "match": "LIGHT",
-  "confidence": 0.85,
+  "shade": "21",
+  "confidence": 0.8,
   "reasoning": "색상 분석 이유",
-  "secondary": "MEDIUM"
+  "secondary": "23"
 }`
             },
             {
@@ -84,19 +81,14 @@ export default async function handler(req, res) {
       };
     }
 
-    // 결과 매핑 (LIGHT -> 21호, MEDIUM -> 23호)
-    const shadeMapping = { 'LIGHT': '21', 'MEDIUM': '23' };
-    const actualShade = shadeMapping[analysisResult.match] || '23';
-    const actualSecondary = shadeMapping[analysisResult.secondary] || '21';
-
-    // 결과 검증 및 보정
-    const validMatches = ['LIGHT', 'MEDIUM'];
-    if (!validMatches.includes(analysisResult.match)) {
-      analysisResult.match = 'MEDIUM';
+    // 결과 매핑 및 검증
+    const validShades = ['17', '21', '23', '25'];
+    if (!validShades.includes(analysisResult.shade)) {
+      analysisResult.shade = '21'; // 기본값
     }
 
-    if (!validMatches.includes(analysisResult.secondary)) {
-      analysisResult.secondary = analysisResult.match === 'LIGHT' ? 'MEDIUM' : 'LIGHT';
+    if (!validShades.includes(analysisResult.secondary)) {
+      analysisResult.secondary = analysisResult.shade === '21' ? '23' : '21';
     }
 
     // 신뢰도 범위 체크
@@ -109,12 +101,12 @@ export default async function handler(req, res) {
     res.status(200).json({
       success: true,
       result: {
-        recommendedShade: actualShade,
+        recommendedShade: analysisResult.shade,
         confidence: analysisResult.confidence,
-        secondaryShade: actualSecondary,
-        message: `당신은 ${actualShade}호에 가깝습니다.`,
+        secondaryShade: analysisResult.secondary,
+        message: `당신은 ${analysisResult.shade}호에 가깝습니다.`,
         reasoning: analysisResult.reasoning,
-        method: 'skin_patch_analysis'
+        method: 'simple_masking_analysis'
       }
     });
 
